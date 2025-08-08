@@ -6,7 +6,7 @@
     <groupId>io.github.generaloss</groupId>
     <artifactId>chrono-kit</artifactId>
     <version>25.8.1-SNAPSHOT-1</version>
-    <name>chrono-kit</name>
+    <name>${artifactId}</name>
 
     <description>Time Utils Library</description>
     <url>https://github.com/generaloss/chrono-kit</url>
@@ -28,9 +28,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:git://github.com/generaloss/chrono-kit.git</connection>
-        <developerConnection>scm:git:ssh://github.com:generaloss/chrono-kit.git</developerConnection>
-        <url>https://github.com/generaloss/chrono-kit/tree/master</url>
+        <connection>scm:git:git://github.com/generaloss/${artifactId}.git</connection>
+        <developerConnection>scm:git:ssh://github.com:generaloss/${artifactId}.git</developerConnection>
+        <url>https://github.com/generaloss/${artifactId}/tree/master</url>
     </scm>
 
     <developers>
@@ -104,6 +104,7 @@
                 <version>0.3.0</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <deploymentName>${artifactId}:${version}</deploymentName>
                     <publishingServerId>central</publishingServerId>
                     <tokenAuth>true</tokenAuth>
                 </configuration>
