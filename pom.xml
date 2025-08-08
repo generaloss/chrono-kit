@@ -9,7 +9,7 @@
     <name>${artifactId}</name>
 
     <description>Time Utils Library</description>
-    <url>https://github.com/generaloss/chrono-kit</url>
+    <url>https://github.com/generaloss/${artifactId}</url>
 
     <dependencies>
         <!-- provided -->
