@@ -1,11 +1,9 @@
 package generaloss.chronokit;
 
-import generaloss.spatialmath.Maths;
-
 public class Sync {
 
-    private long lastTime;
-    private int targetDeltaTime;
+    private long lastTimeNanos;
+    private long targetDeltaNanos;
     private boolean enabled;
 
     public Sync(double rate) {
@@ -19,36 +17,40 @@ public class Sync {
 
     public void enable(boolean enabled) {
         this.enabled = enabled;
+        if(enabled)
+            lastTimeNanos = System.nanoTime();
     }
 
 
     public double getRate() {
-        if(targetDeltaTime == 0)
+        if(targetDeltaNanos == 0L)
             return 0D;
-        return (Maths.NANOS_IN_SECf / targetDeltaTime);
+        return (TimeUtils.NANOS_IN_SEC_D / targetDeltaNanos);
     }
 
     public void setRate(double rate) {
-        if(rate == 0D)
-            return;
-
-        targetDeltaTime = (int) (Maths.MILLIS_IN_SECf / rate); // time between frames with a given number of ticks per second
-        lastTime = System.currentTimeMillis();                 // to calculate the time between frames
+        if(rate <= 0D) {
+            targetDeltaNanos = 0L;
+        }else{
+            targetDeltaNanos = (long) (TimeUtils.NANOS_IN_SEC_D / rate);
+        }
+        lastTimeNanos = System.nanoTime();
     }
 
 
     public void sync() {
-        if(!enabled || targetDeltaTime == 0)
+        if(!enabled || targetDeltaNanos == 0L) {
+            lastTimeNanos = System.nanoTime();
             return;
-
-        final long deltaTime = (System.currentTimeMillis() - lastTime); // current time between frames
-        if(deltaTime >= 0L){
-            final long sleepTime = (targetDeltaTime - deltaTime); // time to adjust tick per second
-            if(sleepTime > 0L)
-                TimeUtils.delayMillis(sleepTime);
         }
 
-        lastTime = System.currentTimeMillis();
+        final long now = System.nanoTime();
+        final long delta = (now - lastTimeNanos);
+        final long sleepNanos = (targetDeltaNanos - delta);
+        if(sleepNanos >= 0L)
+            TimeUtils.sleepNanos(sleepNanos);
+
+        lastTimeNanos = System.nanoTime();
     }
 
 }

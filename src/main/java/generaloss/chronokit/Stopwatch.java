@@ -1,7 +1,5 @@
 package generaloss.chronokit;
 
-import generaloss.spatialmath.Maths;
-
 public class Stopwatch {
 
     private long lastTimeNanos, timeNanos;
@@ -49,11 +47,11 @@ public class Stopwatch {
     }
 
     public Stopwatch setMillis(double millis) {
-        return this.setNanos(Maths.round(millis * Maths.NANOS_IN_MSf));
+        return this.setNanos(Math.round(millis * TimeUtils.NANOS_IN_MS_D));
     }
 
     public Stopwatch setSeconds(double seconds) {
-        return this.setMillis(seconds * Maths.MILLIS_IN_SECf);
+        return this.setMillis(seconds * TimeUtils.MILLIS_IN_SEC_D);
     }
 
     public Stopwatch setMinutes(double minutes) {
@@ -73,19 +71,19 @@ public class Stopwatch {
     }
 
     public float getMillis() {
-        return this.getNanos() / Maths.NANOS_IN_MSf;
+        return (this.getNanos() / TimeUtils.NANOS_IN_MS_F);
     }
 
     public float getSeconds() {
-        return this.getMillis() / Maths.MILLIS_IN_SECf;
+        return (this.getMillis() / TimeUtils.MILLIS_IN_SEC_F);
     }
 
     public float getMinutes() {
-        return this.getSeconds() / 60F;
+        return (this.getSeconds() / 60F);
     }
 
     public float getHours() {
-        return this.getMinutes() / 60F;
+        return (this.getMinutes() / 60F);
     }
 
 }

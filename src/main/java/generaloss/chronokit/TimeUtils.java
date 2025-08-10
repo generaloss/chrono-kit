@@ -1,32 +1,62 @@
 package generaloss.chronokit;
 
-import generaloss.spatialmath.Maths;
 import java.util.function.BooleanSupplier;
 
 public class TimeUtils {
 
+    public static final float NANOS_IN_SEC_F = 1_000_000_000F;
+    public static final float NANOS_IN_MS_F = 1_000_000F;
+    public static final float MILLIS_IN_SEC_F = 1_000F;
+
+    public static final double NANOS_IN_SEC_D = 1_000_000_000D;
+    public static final double NANOS_IN_MS_D = 1_000_000D;
+    public static final double MILLIS_IN_SEC_D = 1_000D;
+
+    public static final int NANOS_IN_SEC_I = 1_000_000_000;
+    public static final int NANOS_IN_MS_I = 1_000_000;
+    public static final int MILLIS_IN_SEC_I = 1_000;
+
+    public static final long NANOS_IN_SEC_L = 1_000_000_000L;
+    public static final long NANOS_IN_MS_L = 1_000_000L;
+    public static final long MILLIS_IN_SEC_L = 1_000L;
+
+
     public static void sleep(long millis, int nanos) {
         try{
             Thread.sleep(millis, nanos);
-        }catch(InterruptedException ignored){ }
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
     }
 
     public static void sleepMillis(long millis) {
         try{
             Thread.sleep(millis);
-        }catch(InterruptedException ignored){ }
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
     }
 
-    public static void sleepNanos(int nanos) {
+    public static void sleepNanos(long nanos) {
+        if(nanos <= 0)
+            return;
+
+        final long millis = (nanos / NANOS_IN_MS_L);
+        final int nanosPart = (int) (nanos % NANOS_IN_MS_L); // [0 .. 999_999]
+
         try{
-            Thread.sleep(0, nanos);
-        }catch(InterruptedException ignored){ }
+            Thread.sleep(millis, nanosPart);
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
     }
 
-    public static void sleepSeconds(float seconds) {
-        final double ms = (seconds * 1000F);
-        final double ns = (Maths.frac(ms) * Maths.NANOS_IN_MSf);
-        sleep((long) ms, (int) ns);
+    public static void sleepSeconds(double seconds) {
+        if(seconds <= 0.0)
+            return;
+
+        final long nanos = (long) (seconds * NANOS_IN_SEC_D);
+        sleepNanos(nanos);
     }
 
 
@@ -42,8 +72,8 @@ public class TimeUtils {
             Thread.onSpinWait();
     }
 
-    public static void delaySeconds(float seconds) {
-        delayMillis((long) (seconds * 1000F));
+    public static void delaySeconds(double seconds) {
+        delayMillis((long) (seconds * 1000D));
     }
 
 

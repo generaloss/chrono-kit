@@ -1,6 +1,5 @@
 package generaloss.chronokit;
 
-import generaloss.spatialmath.Maths;
 
 public class DeltaTimeCounter {
 
@@ -13,7 +12,7 @@ public class DeltaTimeCounter {
 
     public void update() {
         final long currentTime = System.nanoTime();
-        deltaTime = (currentTime - lastTime) / Maths.NANOS_IN_SECf;
+        deltaTime = (currentTime - lastTime) / TimeUtils.NANOS_IN_SEC_F;
         lastTime = currentTime;
     }
 

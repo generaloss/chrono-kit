@@ -1,7 +1,5 @@
 package generaloss.chronokit;
 
-import generaloss.spatialmath.Maths;
-
 public class PerSecondCounter {
 
     private long lastTime;
@@ -15,7 +13,7 @@ public class PerSecondCounter {
         final long currentTime = System.nanoTime();
 
         final long difference = (currentTime - lastTime);
-        if(difference > Maths.NANOS_IN_SECi){
+        if(difference > TimeUtils.NANOS_IN_SEC_L){
             lastTime = currentTime;
 
             rate = counter;
