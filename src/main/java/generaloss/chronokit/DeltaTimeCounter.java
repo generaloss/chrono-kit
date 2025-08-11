@@ -3,26 +3,26 @@ package generaloss.chronokit;
 
 public class DeltaTimeCounter {
 
-    private long lastTime;
-    private float deltaTime;
+    private long lastTimeNanos;
+    private float deltaTimeSeconds;
 
     public DeltaTimeCounter() {
-        this.lastTime = System.nanoTime();
+        this.lastTimeNanos = System.nanoTime();
     }
 
     public void update() {
-        final long currentTime = System.nanoTime();
-        deltaTime = (currentTime - lastTime) / TimeUtils.NANOS_IN_SEC_F;
-        lastTime = currentTime;
+        final long nowNanos = System.nanoTime();
+        deltaTimeSeconds = (nowNanos - lastTimeNanos) / TimeUtils.NANOS_IN_SEC_F;
+        lastTimeNanos = nowNanos;
     }
 
     public void reset() {
-        lastTime = System.nanoTime();
-        deltaTime = 0F;
+        lastTimeNanos = System.nanoTime();
+        deltaTimeSeconds = 0F;
     }
 
     public float get() {
-        return deltaTime;
+        return deltaTimeSeconds;
     }
 
 }

@@ -2,13 +2,14 @@ package generaloss.chronokit;
 
 public class Sync {
 
-    private long lastTimeNanos;
-    private long targetDeltaNanos;
     private boolean enabled;
+    private long lastTimeNanos;
+    private long deltaNanos, targetDeltaNanos;
+    private long sleepNanos;
 
     public Sync(double rate) {
-        this.setRate(rate);
         this.enable(true);
+        this.setRate(rate);
     }
 
     public boolean isEnabled() {
@@ -17,15 +18,33 @@ public class Sync {
 
     public void enable(boolean enabled) {
         this.enabled = enabled;
-        if(enabled)
-            lastTimeNanos = System.nanoTime();
+        if(!enabled)
+            this.updateLastTime();
     }
 
 
-    public double getRate() {
+    private void updateLastTime() {
+        lastTimeNanos = System.nanoTime();
+    }
+
+
+    public long getWorkDeltaNanos() {
+        return deltaNanos;
+    }
+
+    public long getTargetDeltaNanos() {
+        return targetDeltaNanos;
+    }
+
+    public long getSleepNanos() {
+        return sleepNanos;
+    }
+
+
+    public float getRate() {
         if(targetDeltaNanos == 0L)
-            return 0D;
-        return (TimeUtils.NANOS_IN_SEC_D / targetDeltaNanos);
+            return 0F;
+        return (TimeUtils.NANOS_IN_SEC_F / targetDeltaNanos);
     }
 
     public void setRate(double rate) {
@@ -34,23 +53,23 @@ public class Sync {
         }else{
             targetDeltaNanos = (long) (TimeUtils.NANOS_IN_SEC_D / rate);
         }
-        lastTimeNanos = System.nanoTime();
+        this.updateLastTime();
     }
 
 
     public void sync() {
+        deltaNanos = (System.nanoTime() - lastTimeNanos);
+
         if(!enabled || targetDeltaNanos == 0L) {
-            lastTimeNanos = System.nanoTime();
+            this.updateLastTime();
             return;
         }
 
-        final long now = System.nanoTime();
-        final long delta = (now - lastTimeNanos);
-        final long sleepNanos = (targetDeltaNanos - delta);
+        sleepNanos = (targetDeltaNanos - deltaNanos);
         if(sleepNanos >= 0L)
-            TimeUtils.sleepNanos(sleepNanos);
+            TimeUtils.delayNanos(sleepNanos);
 
-        lastTimeNanos = System.nanoTime();
+        this.updateLastTime();
     }
 
 }

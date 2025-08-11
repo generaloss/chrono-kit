@@ -43,12 +43,7 @@ public class TimeUtils {
 
         final long millis = (nanos / NANOS_IN_MS_L);
         final int nanosPart = (int) (nanos % NANOS_IN_MS_L); // [0 .. 999_999]
-
-        try{
-            Thread.sleep(millis, nanosPart);
-        }catch(InterruptedException e){
-            Thread.currentThread().interrupt();
-        }
+        sleep(millis, nanosPart);
     }
 
     public static void sleepSeconds(double seconds) {
