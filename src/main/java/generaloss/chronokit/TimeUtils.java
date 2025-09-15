@@ -20,14 +20,9 @@ public class TimeUtils {
     public static final long NANOS_IN_MS_L = 1_000_000L;
     public static final long MILLIS_IN_SEC_L = 1_000L;
 
+    private static final int SLEEP_THRESHOLD_MILLIS = 100;
+    private static final long SLEEP_THRESHOLD_NANOS = (SLEEP_THRESHOLD_MILLIS * TimeUtils.NANOS_IN_MS_L);
 
-    public static void sleep(long millis, int nanos) {
-        try{
-            Thread.sleep(millis, nanos);
-        }catch(InterruptedException e){
-            Thread.currentThread().interrupt();
-        }
-    }
 
     public static void sleepMillis(long millis) {
         try{
@@ -37,8 +32,16 @@ public class TimeUtils {
         }
     }
 
+    public static void sleep(long millis, int nanos) {
+        try{
+            Thread.sleep(millis, nanos);
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public static void sleepNanos(long nanos) {
-        if(nanos <= 0)
+        if(nanos <= 0L)
             return;
 
         final long millis = (nanos / NANOS_IN_MS_L);
@@ -47,28 +50,52 @@ public class TimeUtils {
     }
 
     public static void sleepSeconds(double seconds) {
-        if(seconds <= 0.0)
+        if(seconds <= 0D)
             return;
 
-        final long nanos = (long) (seconds * NANOS_IN_SEC_D);
-        sleepNanos(nanos);
+        final long millis = (long) (seconds * MILLIS_IN_SEC_D);
+        sleepMillis(millis);
     }
 
 
-    public static void delayNanos(long nanos) {
+    public static void spinWaitNanos(long nanos) {
         final long current = System.nanoTime();
         while(System.nanoTime() - current < nanos)
             Thread.onSpinWait();
     }
 
-    public static void delayMillis(long millis) {
+    public static void spinWaitMillis(long millis) {
         final long current = System.currentTimeMillis();
         while(System.currentTimeMillis() - current < millis)
             Thread.onSpinWait();
     }
 
+    public static void spinWaitSeconds(double seconds) {
+        spinWaitNanos((long) (seconds * NANOS_IN_SEC_D));
+    }
+
+
+    public static void delayNanos(long nanos) {
+        if(nanos > SLEEP_THRESHOLD_NANOS) {
+            sleepNanos(nanos - SLEEP_THRESHOLD_NANOS); // reduce CPU load
+            spinWaitNanos(SLEEP_THRESHOLD_NANOS); // increase accuracy
+        }else{
+            spinWaitNanos(nanos);
+        }
+    }
+
+    public static void delayMillis(long millis) {
+        if(millis > SLEEP_THRESHOLD_MILLIS) {
+            sleepMillis(millis - SLEEP_THRESHOLD_MILLIS);
+            spinWaitMillis(SLEEP_THRESHOLD_MILLIS);
+        }else{
+            spinWaitMillis(millis);
+        }
+    }
+
     public static void delaySeconds(double seconds) {
-        delayMillis((long) (seconds * 1000D));
+        final long nanos = (long) (seconds * NANOS_IN_SEC_D);
+        delayNanos(nanos);
     }
 
 
@@ -84,10 +111,10 @@ public class TimeUtils {
         return (System.currentTimeMillis() - lastMillis);
     }
 
-    public static long waitFor(BooleanSupplier supplier, long timeoutMillis, Runnable onTimeout) {
+    public static long waitFor(BooleanSupplier supplier, long timeoutMillis, Runnable timeoutRunnable) {
         final long lastMillis = waitFor(supplier, timeoutMillis);
         if(!supplier.getAsBoolean())
-            onTimeout.run();
+            timeoutRunnable.run();
         return lastMillis;
     }
 

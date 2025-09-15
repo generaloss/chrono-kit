@@ -8,7 +8,7 @@ public class Sync {
     private long sleepNanos;
 
     public Sync(double rate) {
-        this.enable(true);
+        this.setEnabled(true);
         this.setRate(rate);
     }
 
@@ -16,10 +16,18 @@ public class Sync {
         return enabled;
     }
 
-    public void enable(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if(!enabled)
             this.updateLastTime();
+    }
+
+    public void enable() {
+        this.setEnabled(true);
+    }
+
+    public void disable() {
+        this.setEnabled(false);
     }
 
 

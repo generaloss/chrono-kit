@@ -70,6 +70,10 @@ public class AsyncRunnable {
         this.submitAsyncTask(() -> this.runIntervalSync(delayMillis, periodMillis));
     }
 
+    public void runInterval(long periodMillis) {
+        this.runInterval(0L, periodMillis);
+    }
+
 
     public synchronized void cancel() {
         this.cancel(taskRef.get());

@@ -1,11 +1,11 @@
 package generaloss.chronokit;
 
-public class PerSecondCounter {
+public class PerSecCounter {
 
     private long lastTime;
-    private int counter, rate;
+    private int counter, count;
 
-    public PerSecondCounter() {
+    public PerSecCounter() {
         this.lastTime = System.nanoTime();
     }
 
@@ -16,7 +16,7 @@ public class PerSecondCounter {
         if(difference > TimeUtils.NANOS_IN_SEC_L){
             lastTime = currentTime;
 
-            rate = counter;
+            count = counter;
             counter = 0;
         }else
             counter++;
@@ -25,11 +25,11 @@ public class PerSecondCounter {
     public void reset() {
         lastTime = System.nanoTime();
         counter = 0;
-        rate = 0;
+        count = 0;
     }
 
-    public int get() {
-        return rate;
+    public int getCount() {
+        return count;
     }
 
 }

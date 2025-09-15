@@ -3,12 +3,12 @@ package generaloss.chronokit;
 public class Stopwatch {
 
     private long lastTimeNanos, timeNanos;
-    private boolean running, paused;
+    private boolean active, paused;
 
     public Stopwatch start() {
-        if(running)
+        if(active)
             return this;
-        running = true;
+        active = true;
         return this.reset();
     }
 
@@ -19,7 +19,7 @@ public class Stopwatch {
     }
 
     public Stopwatch stop() {
-        running = false;
+        active = false;
         return this;
     }
 
@@ -37,8 +37,8 @@ public class Stopwatch {
         return paused;
     }
 
-    public boolean isRunning() {
-        return running;
+    public boolean isActive() {
+        return active;
     }
 
     public Stopwatch setNanos(long nanos) {
@@ -62,8 +62,12 @@ public class Stopwatch {
         return this.setMinutes(hours * 60D);
     }
 
+    public Stopwatch setDays(double days) {
+        return this.setHours(days * 24D);
+    }
+
     public long getNanos() {
-        if(!running)
+        if(!active)
             return 0L;
         if(!paused)
             timeNanos = System.nanoTime();
@@ -84,6 +88,10 @@ public class Stopwatch {
 
     public float getHours() {
         return (this.getMinutes() / 60F);
+    }
+
+    public float getDays() {
+        return (this.getHours() / 24F);
     }
 
 }

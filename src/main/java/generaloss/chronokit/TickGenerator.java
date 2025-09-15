@@ -6,7 +6,7 @@ public class TickGenerator {
     private volatile Thread thread;
     private volatile boolean running;
 
-    public TickGenerator(float tickRate) {
+    public TickGenerator(double tickRate) {
         this.sync = new Sync(tickRate);
     }
 
@@ -26,7 +26,7 @@ public class TickGenerator {
         return !this.isRunning();
     }
 
-    public void start(Tickable tickable) {
+    public void start(Runnable runnable) {
         final Thread self = Thread.currentThread();
 
         synchronized(this) {
@@ -40,7 +40,7 @@ public class TickGenerator {
         try {
             while(!self.isInterrupted() && running) {
                 try {
-                    tickable.tick();
+                    runnable.run();
                 } catch(Throwable t) {
                     t.printStackTrace(System.err);
                 }
@@ -56,11 +56,11 @@ public class TickGenerator {
         }
     }
 
-    public synchronized Thread startAsync(Tickable tickable) {
+    public synchronized Thread startAsync(Runnable runnable) {
         if(this.isRunning())
             throw new IllegalStateException("TickGenerator already running");
 
-        thread = new Thread(() -> this.start(tickable));
+        thread = new Thread(() -> this.start(runnable));
         thread.setName("TickGenerator-Thread #" + this.hashCode());
         thread.setDaemon(true);
 

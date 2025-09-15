@@ -21,7 +21,7 @@ public class DeltaTimeCounter {
         deltaTimeSeconds = 0F;
     }
 
-    public float get() {
+    public float getTime() {
         return deltaTimeSeconds;
     }
 
