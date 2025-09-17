@@ -24,25 +24,25 @@ showcases:
 ``` java
 Stopwatch stopwatch = new Stopwatch().start();
 // 1-second task
-final float seconds = stopwatch.getSeconds(); // ~ 1f
+float seconds = stopwatch.getSeconds(); // ~ 1f
 ```
 
 ``` java
 Stopwatch stopwatch = new Stopwatch().start();
 // 3-second task
-final float stamp1 = stopwatch.getSeconds(); // ~ 3f
+float stamp1 = stopwatch.getSeconds(); // ~ 3f
 // 300-ms task
-final float stamp2 = stopwatch.getMillis(); // ~ 3300f
+float stamp2 = stopwatch.getMillis(); // ~ 3300f
 ```
 
 ``` java
 Stopwatch stopwatch = new Stopwatch().start();
 // 5-second task
-final float seconds = stopwatch.getSeconds(); // ~ 5f
+float seconds = stopwatch.getSeconds(); // ~ 5f
 
 stopwatch.reset();
 // 500-ms task
-final float millis = stopwatch.getMillis(); // ~ 500f
+float millis = stopwatch.getMillis(); // ~ 500f
 ```
 
 ### Sync
@@ -85,7 +85,7 @@ while(true) {
 ### TickGenerator
 
 ``` java
-final TickGenerator tickGen = new TickGenerator(20.0);
+TickGenerator tickGen = new TickGenerator(20.0);
 
 tickGen.startAsync(() -> {
     // do something 20 times per second
