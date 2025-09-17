@@ -19,8 +19,6 @@ long timeMillis = TimeUtils.waitFor(BooleanSupplier supplier, long timeoutMillis
 
 ### Stopwatch
 
-showcases:
-
 ``` java
 Stopwatch stopwatch = new Stopwatch().start();
 // 1-second task
