@@ -1,4 +1,4 @@
-# [Chrono Kit](https://github.com/generaloss/chrono-kit)
+# [Chrono-Kit](https://github.com/generaloss/chrono-kit)
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.generaloss/chrono-kit.svg)](https://mvnrepository.com/artifact/io.github.generaloss/chrono-kit)
 
@@ -18,8 +18,6 @@ long timeMillis = TimeUtils.waitFor(BooleanSupplier supplier, long timeoutMillis
 ```
 
 ### Stopwatch
-
-showcases:
 
 ``` java
 Stopwatch stopwatch = new Stopwatch().start();
