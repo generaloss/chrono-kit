@@ -41,7 +41,7 @@ public class TickGenerator {
             while(!self.isInterrupted() && running) {
                 try {
                     runnable.run();
-                } catch(Throwable t) {
+                }catch(Throwable t) {
                     t.printStackTrace(System.err);
                 }
                 sync.sync();
